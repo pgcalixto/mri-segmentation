@@ -29,7 +29,7 @@ def multi_slice_viewer(image):
     fig, axes = plt.subplots()
     axes.image3d = image
     axes.index = 1
-    axes.imshow(image[:][axes.index][:], vmin=0, vmax=1)
+    axes.imshow(image[:, axes.index, :], vmin=0, vmax=1)
     # sets the key event
     fig.canvas.mpl_connect('key_press_event', process_key)
     plt.show()
@@ -48,13 +48,13 @@ def previous_slice(axis):
     """Go to the previous slice."""
     image3d = axis.image3d
     axis.index = (axis.index - 1) % image3d.shape[1]  # wrap around using %
-    axis.images[0].set_array(image3d[:][axis.index][:])
+    axis.images[0].set_array(image3d[:, axis.index, :])
 
 def next_slice(axis):
     """Go to the next slice."""
     image3d = axis.image3d
     axis.index = (axis.index + 1) % image3d.shape[1]
-    axis.images[0].set_array(image3d[:][axis.index][:])
+    axis.images[0].set_array(image3d[:, axis.index, :])
 
 
 def main():
