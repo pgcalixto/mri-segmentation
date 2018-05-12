@@ -17,7 +17,7 @@ def load_mat_img():
     return image
 
 def multi_slice_viewer(image):
-    """Display image and sets key press event.
+    """Display image and set key press event.
 
     Displays 3D input image data in 2D slice and sets the key press events which
     go forward and backward through slices.
@@ -35,6 +35,7 @@ def multi_slice_viewer(image):
     plt.show()
 
 def process_key(event):
+    """Set key actions for the canvas."""
     fig = event.canvas.figure
     axis = fig.axes[0]
     if event.key == 'j':
