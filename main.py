@@ -53,7 +53,7 @@ def previous_slice(axis):
 def next_slice(axis):
     """Go to the next slice."""
     image3d = axis.image3d
-    axis.index = (axis.index + 1) % image3d.shape[0]
+    axis.index = (axis.index + 1) % image3d.shape[1]
     axis.images[0].set_array(image3d[:][axis.index][:])
 
 
