@@ -28,17 +28,11 @@ def multi_slice_viewer(image):
     # saves image in axis data, sets slice index and plots it
     fig, axes = plt.subplots(2, 2)
 
-    axes[0][0].image3d = image
-    axes[0][0].index = 1
-    axes[0][0].imshow(image[axes[0][0].index, :, :], vmin=0, vmax=1)
-
-    axes[0][1].image3d = image
-    axes[0][1].index = 1
-    axes[0][1].imshow(image[:, axes[0][1].index, :], vmin=0, vmax=1)
-
-    axes[1][0].image3d = image
-    axes[1][0].index = 1
-    axes[1][0].imshow(image[:, :, axes[1][0].index], vmin=0, vmax=1)
+    for i, j in [(0, 0), (0, 1), (1, 0)]:
+        axes[i][j].image3d = image
+        axes[i][j].index = 1
+        image3d = np.rollaxis(image, 2 * i + j)
+        axes[i][j].imshow(image3d[axes[i][j].index, :, :], vmin=0, vmax=1)
 
     axes[-1][-1].axis('off')
 
@@ -57,31 +51,20 @@ def process_key(event):
 
 def previous_slice(axes):
     """Go to the previous slice."""
-    image3d = axes[0].image3d
-    axes[0].index = (axes[0].index - 1) % image3d.shape[0]
-    axes[0].images[0].set_array(image3d[axes[0].index, :, :])
+    for i in range(3):
+        image3d = np.rollaxis(axes[i].image3d, i)
+         # wrap around using % modulus
+        axes[i].index = (axes[i].index - 1) % image3d.shape[0]
+        axes[i].images[0].set_array(image3d[axes[i].index, :, :])
 
-    image3d = axes[1].image3d
-    axes[1].index = (axes[1].index - 1) % image3d.shape[1] # wrap around using %
-    axes[1].images[0].set_array(image3d[:, axes[1].index, :])
-
-    image3d = axes[2].image3d
-    axes[2].index = (axes[2].index - 1) % image3d.shape[2] # wrap around using %
-    axes[2].images[0].set_array(image3d[:, :, axes[2].index])
 
 def next_slice(axes):
     """Go to the next slice."""
-    image3d = axes[0].image3d
-    axes[0].index = (axes[0].index + 1) % image3d.shape[0] # wrap around using %
-    axes[0].images[0].set_array(image3d[axes[0].index, :, :])
-
-    image3d = axes[1].image3d
-    axes[1].index = (axes[1].index + 1) % image3d.shape[1] # wrap around using %
-    axes[1].images[0].set_array(image3d[:, axes[1].index, :])
-
-    image3d = axes[2].image3d
-    axes[2].index = (axes[2].index + 1) % image3d.shape[2] # wrap around using %
-    axes[2].images[0].set_array(image3d[:, :, axes[2].index])
+    for i in range(3):
+        image3d = np.rollaxis(axes[i].image3d, i)
+         # wrap around using % modulus
+        axes[i].index = (axes[i].index - 1) % image3d.shape[0]
+        axes[i].images[0].set_array(image3d[axes[i].index, :, :])
 
 
 def main():
