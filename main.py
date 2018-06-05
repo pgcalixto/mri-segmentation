@@ -26,10 +26,22 @@ def multi_slice_viewer(image):
         image (numpy.ndarray): tridimensional array of image values
     """
     # saves image in axis data, sets slice index and plots it
-    fig, axes = plt.subplots()
-    axes.image3d = image
-    axes.index = 1
-    axes.imshow(image[:, axes.index, :], vmin=0, vmax=1)
+    fig, axes = plt.subplots(2, 2)
+
+    axes[0][0].image3d = image
+    axes[0][0].index = 1
+    axes[0][0].imshow(image[axes[0][0].index, :, :], vmin=0, vmax=1)
+
+    axes[0][1].image3d = image
+    axes[0][1].index = 1
+    axes[0][1].imshow(image[:, axes[0][1].index, :], vmin=0, vmax=1)
+
+    axes[1][0].image3d = image
+    axes[1][0].index = 1
+    axes[1][0].imshow(image[:, :, axes[1][0].index], vmin=0, vmax=1)
+
+    axes[-1][-1].axis('off')
+
     # sets the key event
     fig.canvas.mpl_connect('key_press_event', process_key)
     plt.show()
