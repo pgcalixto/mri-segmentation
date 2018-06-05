@@ -53,7 +53,7 @@ def previous_slice(axes):
     """Go to the previous slice."""
     for i in range(3):
         image3d = axes[i].image3d
-         # wrap around using % modulus
+        # wrap around using % modulus
         axes[i].index = (axes[i].index - 1) % image3d.shape[0]
         axes[i].images[0].set_array(image3d[axes[i].index, :, :])
 
@@ -62,8 +62,8 @@ def next_slice(axes):
     """Go to the next slice."""
     for i in range(3):
         image3d = axes[i].image3d
-         # wrap around using % modulus
-        axes[i].index = (axes[i].index - 1) % image3d.shape[0]
+        # wrap around using % modulus
+        axes[i].index = (axes[i].index + 1) % image3d.shape[0]
         axes[i].images[0].set_array(image3d[axes[i].index, :, :])
 
 
