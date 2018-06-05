@@ -49,24 +49,39 @@ def multi_slice_viewer(image):
 def process_key(event):
     """Set key actions for the canvas."""
     fig = event.canvas.figure
-    axis = fig.axes[0]
     if event.key == 'j':
-        previous_slice(axis)
+        previous_slice(fig.axes)
     elif event.key == 'k':
-        next_slice(axis)
+        next_slice(fig.axes)
     fig.canvas.draw()
 
-def previous_slice(axis):
+def previous_slice(axes):
     """Go to the previous slice."""
-    image3d = axis.image3d
-    axis.index = (axis.index - 1) % image3d.shape[1]  # wrap around using %
-    axis.images[0].set_array(image3d[:, axis.index, :])
+    image3d = axes[0].image3d
+    axes[0].index = (axes[0].index - 1) % image3d.shape[0]
+    axes[0].images[0].set_array(image3d[axes[0].index, :, :])
 
-def next_slice(axis):
+    image3d = axes[1].image3d
+    axes[1].index = (axes[1].index - 1) % image3d.shape[1] # wrap around using %
+    axes[1].images[0].set_array(image3d[:, axes[1].index, :])
+
+    image3d = axes[2].image3d
+    axes[2].index = (axes[2].index - 1) % image3d.shape[2] # wrap around using %
+    axes[2].images[0].set_array(image3d[:, :, axes[2].index])
+
+def next_slice(axes):
     """Go to the next slice."""
-    image3d = axis.image3d
-    axis.index = (axis.index + 1) % image3d.shape[1]
-    axis.images[0].set_array(image3d[:, axis.index, :])
+    image3d = axes[0].image3d
+    axes[0].index = (axes[0].index + 1) % image3d.shape[0] # wrap around using %
+    axes[0].images[0].set_array(image3d[axes[0].index, :, :])
+
+    image3d = axes[1].image3d
+    axes[1].index = (axes[1].index + 1) % image3d.shape[1] # wrap around using %
+    axes[1].images[0].set_array(image3d[:, axes[1].index, :])
+
+    image3d = axes[2].image3d
+    axes[2].index = (axes[2].index + 1) % image3d.shape[2] # wrap around using %
+    axes[2].images[0].set_array(image3d[:, :, axes[2].index])
 
 
 def main():
