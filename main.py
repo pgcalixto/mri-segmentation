@@ -28,13 +28,14 @@ def multi_slice_viewer(image):
     # saves image in axis data, sets slice index and plots it
     fig, axes = plt.subplots(2, 2)
 
+    # loop through subplots, setting their initial images
     for i, j in [(0, 0), (0, 1), (1, 0)]:
         image3d = np.rollaxis(image, 2 * i + j)
         axes[i][j].index = 1
         axes[i][j].imshow(image3d[axes[i][j].index, :, :], vmin=0, vmax=1)
         axes[i][j].image3d = image3d
 
-    axes[-1][-1].axis('off')
+    axes[-1][-1].axis('off') # last subplot is not used
 
     # sets the key event
     fig.canvas.mpl_connect('key_press_event', process_key)
