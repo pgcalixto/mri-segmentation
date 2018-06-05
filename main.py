@@ -29,10 +29,10 @@ def multi_slice_viewer(image):
     fig, axes = plt.subplots(2, 2)
 
     for i, j in [(0, 0), (0, 1), (1, 0)]:
-        axes[i][j].image3d = image
-        axes[i][j].index = 1
         image3d = np.rollaxis(image, 2 * i + j)
+        axes[i][j].index = 1
         axes[i][j].imshow(image3d[axes[i][j].index, :, :], vmin=0, vmax=1)
+        axes[i][j].image3d = image3d
 
     axes[-1][-1].axis('off')
 
@@ -52,7 +52,7 @@ def process_key(event):
 def previous_slice(axes):
     """Go to the previous slice."""
     for i in range(3):
-        image3d = np.rollaxis(axes[i].image3d, i)
+        image3d = axes[i].image3d
          # wrap around using % modulus
         axes[i].index = (axes[i].index - 1) % image3d.shape[0]
         axes[i].images[0].set_array(image3d[axes[i].index, :, :])
@@ -61,7 +61,7 @@ def previous_slice(axes):
 def next_slice(axes):
     """Go to the next slice."""
     for i in range(3):
-        image3d = np.rollaxis(axes[i].image3d, i)
+        image3d = axes[i].image3d
          # wrap around using % modulus
         axes[i].index = (axes[i].index - 1) % image3d.shape[0]
         axes[i].images[0].set_array(image3d[axes[i].index, :, :])
