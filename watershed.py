@@ -9,21 +9,18 @@ import cv2
 
 image = io.imread('cerebro.jpg')
 
-shifted = cv2.pyrMeanShiftFiltering(image, 21, 51)
-# convert the mean shift image to grayscale, then apply
-# Otsu's thresholding
-gray = cv2.cvtColor(shifted, cv2.COLOR_BGR2GRAY)
-thresh = cv2.threshold(gray, 0, 255,
-	cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+# makes the image grey colormap
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# find continuous region (low gradient -
-# where less than 10 for this image) --> markers
-# disk(5) is used here to get a more smooth image
-markers = rank.gradient(thresh, disk(2)) < 10
+# denoise image
+denoised = rank.median(gray, disk(1))
+
+# create the sheds
+markers = rank.gradient(denoised, disk(1)) < 15
 markers = ndi.label(markers)[0]
 
 # process the watershed
-labels = watershed(thresh, markers)
+labels = watershed(gray, markers)
 
 # display results
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 8),
@@ -33,7 +30,7 @@ ax = axes.ravel()
 ax[0].imshow(image, cmap=plt.cm.gray, interpolation='nearest')
 ax[0].set_title("Original")
 
-ax[1].imshow(thresh, cmap=plt.cm.nipy_spectral, interpolation='nearest')
+ax[1].imshow(gray, cmap=plt.cm.nipy_spectral, interpolation='nearest')
 ax[1].set_title("Threshold")
 
 ax[2].imshow(markers, cmap=plt.cm.nipy_spectral, interpolation='nearest')
